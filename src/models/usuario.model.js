@@ -1,9 +1,9 @@
 // src/models/usuario.model.js
-const { DataTypes } = require('sequelize');
-const sequelize         = require('../db');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db");
 
 const Usuario = sequelize.define(
-  'Usuario',
+  "Usuario",
   {
     id_usuario: {
       type: DataTypes.INTEGER,
@@ -28,13 +28,13 @@ const Usuario = sequelize.define(
       allowNull: false,
     },
     telefono: DataTypes.STRING(20),
-    calle:    DataTypes.STRING(150),
-    ciudad:   DataTypes.STRING(100),
+    calle: DataTypes.STRING(150),
+    ciudad: DataTypes.STRING(100),
     codigo_postal: DataTypes.STRING(20),
     estado_usuario: {
-      type: DataTypes.ENUM('Activo', 'Inactivo'),
+      type: DataTypes.ENUM("Activo", "Inactivo"),
       allowNull: false,
-      defaultValue: 'Activo',
+      defaultValue: "Activo",
     },
     fecha_registro: {
       type: DataTypes.DATE,
@@ -43,7 +43,7 @@ const Usuario = sequelize.define(
     },
   },
   {
-    tableName: 'usuario',
+    tableName: "usuario",
     timestamps: false,
   }
 );
