@@ -1,8 +1,10 @@
 // src/services/abogado.service.js
-
+const { Usuario, Expediente } = require("../models");
 // Lista todos los abogados
 async function listAbogados() {
-  return Abogado.findAll({ attributes: ['id','nombre','apellido','carnet_identidad','email'] });
+  return Abogado.findAll({
+    attributes: ["id", "nombre", "apellido", "carnet_identidad", "correo"],
+  });
 }
 
 // Obtiene un abogado por ID
@@ -19,7 +21,7 @@ async function createAbogado(data) {
 async function updateAbogado(id, data) {
   const [updated, [abogado]] = await Abogado.update(data, {
     where: { id },
-    returning: true
+    returning: true,
   });
   return updated ? abogado : null;
 }
@@ -40,9 +42,9 @@ async function getPerfilAbogado(id) {
     where: {
       [Expediente.sequelize.Op.or]: [
         { abogado_demandante_carnet: abogado.carnet_identidad },
-        { abogado_demandado_carnet:   abogado.carnet_identidad }
-      ]
-    }
+        { abogado_demandado_carnet: abogado.carnet_identidad },
+      ],
+    },
   });
   return { abogado, expedientes };
 }
@@ -53,5 +55,5 @@ module.exports = {
   createAbogado,
   updateAbogado,
   deleteAbogado,
-  getPerfilAbogado
+  getPerfilAbogado,
 };

@@ -1,0 +1,1208 @@
+{
+  "info": {
+    "name": "Sistema de Juzgado API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "description": "Rutas públicas de autenticación",
+      "item": [
+        {
+          "name": "Registro de usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Usuario Ejemplo\",\n    \"correo\": \"usuario@ejemplo.com\",\n    \"password\": \"contraseña123\",\n    \"telefono\": \"1234567890\",\n    \"direccion\": \"Calle Ejemplo #123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"correo\": \"usuario@ejemplo.com\",\n    \"password\": \"contraseña123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/login",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/auth/logout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Recuperar Contraseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"correo\": \"usuario@ejemplo.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/forgot-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Resetear Contraseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"token_de_restablecimiento\",\n    \"newPassword\": \"nueva_contraseña123\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/auth/reset-password",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "auth", "reset-password"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Administradores",
+      "description": "Rutas exclusivas para administradores",
+      "item": [
+        {
+          "name": "Listar Administradores",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/administradores",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "administradores"]
+            }
+          }
+        },
+        {
+          "name": "Crear Administrador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Admin Nuevo\",\n    \"correo\": \"admin@ejemplo.com\",\n    \"password\": \"admin123\",\n    \"telefono\": \"9876543210\",\n    \"direccion\": \"Calle Admin #456\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/administradores",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "administradores"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Administrador",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/administradores/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "administradores", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Administrador",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Admin Actualizado\",\n    \"telefono\": \"5555555555\",\n    \"direccion\": \"Nueva Dirección Admin\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/administradores/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "administradores", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Administrador",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/administradores/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "administradores", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Abogados",
+      "description": "Gestión de abogados (solo admin)",
+      "item": [
+        {
+          "name": "Listar Abogados",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/abogados",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "abogados"]
+            }
+          }
+        },
+        {
+          "name": "Crear Abogado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Abogado Nuevo\",\n    \"correo\": \"abogado@ejemplo.com\",\n    \"password\": \"abogado123\",\n    \"telefono\": \"1122334455\",\n    \"direccion\": \"Calle Abogado #789\",\n    \"numero_colegiado\": \"ABC123456\",\n    \"especialidad\": \"Derecho Civil\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/abogados",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "abogados"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Abogado",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/abogados/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "abogados", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Abogado",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Abogado Actualizado\",\n    \"telefono\": \"9988776655\",\n    \"especialidad\": \"Derecho Penal\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/abogados/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "abogados", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Abogado",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/abogados/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "abogados", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Jueces",
+      "description": "Gestión de jueces (solo admin)",
+      "item": [
+        {
+          "name": "Listar Jueces",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/jueces",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "jueces"]
+            }
+          }
+        },
+        {
+          "name": "Crear Juez",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Juez Nuevo\",\n    \"correo\": \"juez@ejemplo.com\",\n    \"password\": \"juez123\",\n    \"telefono\": \"1122334455\",\n    \"direccion\": \"Calle Juez #123\",\n    \"numero_registro\": \"JZ12345\",\n    \"especialidad\": \"Derecho Familiar\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/jueces",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "jueces"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Juez",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/jueces/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "jueces", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Juez",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Juez Actualizado\",\n    \"telefono\": \"9988776655\",\n    \"especialidad\": \"Derecho Constitucional\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/jueces/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "jueces", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Juez",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/jueces/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "jueces", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Clientes",
+      "description": "Gestión de clientes (admin, abogado)",
+      "item": [
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Crear Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Cliente Nuevo\",\n    \"correo\": \"cliente@ejemplo.com\",\n    \"password\": \"cliente123\",\n    \"telefono\": \"1122334455\",\n    \"direccion\": \"Calle Cliente #123\",\n    \"ci\": \"12345678\",\n    \"fecha_nacimiento\": \"1990-01-01\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/clientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "clientes"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/clientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "clientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Cliente Actualizado\",\n    \"telefono\": \"9988776655\",\n    \"direccion\": \"Nueva Dirección Cliente\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/clientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "clientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/clientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "clientes", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Expedientes",
+      "description": "Gestión de expedientes (admin, abogado, juez)",
+      "item": [
+        {
+          "name": "Listar Expedientes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/expedientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "expedientes"]
+            }
+          }
+        },
+        {
+          "name": "Crear Expediente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"numero\": \"EXP-2025-001\",\n    \"titulo\": \"Caso de Ejemplo\",\n    \"descripcion\": \"Descripción del caso de ejemplo\",\n    \"estado\": \"Abierto\",\n    \"fecha_inicio\": \"2025-01-01\",\n    \"tipo_caso\": \"Civil\",\n    \"id_cliente\": 1,\n    \"id_abogado\": 1,\n    \"id_juez\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/expedientes",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "expedientes"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Expediente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/expedientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "expedientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Expediente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estado\": \"En Proceso\",\n    \"descripcion\": \"Actualización de la descripción del caso\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/expedientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "expedientes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Expediente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/expedientes/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "expedientes", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Audiencias",
+      "description": "Gestión de audiencias (admin, abogado, juez)",
+      "item": [
+        {
+          "name": "Listar Audiencias",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/audiencias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audiencias"]
+            }
+          }
+        },
+        {
+          "name": "Crear Audiencia",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fecha\": \"2025-06-15T10:00:00\",\n    \"descripcion\": \"Primera audiencia del caso\",\n    \"lugar\": \"Sala 3, Piso 2\",\n    \"estado\": \"Programada\",\n    \"id_expediente\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/audiencias",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audiencias"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Audiencia",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/audiencias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audiencias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Audiencia",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"fecha\": \"2025-06-20T11:00:00\",\n    \"lugar\": \"Sala 5, Piso 3\",\n    \"estado\": \"Reprogramada\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/audiencias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audiencias", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Audiencia",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/audiencias/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "audiencias", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Documentos",
+      "description": "Gestión de documentos (admin, abogado, juez)",
+      "item": [
+        {
+          "name": "Listar Documentos",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/documentos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "documentos"]
+            }
+          }
+        },
+        {
+          "name": "Crear Documento",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Documento de prueba\",\n    \"descripcion\": \"Descripción del documento de prueba\",\n    \"url_archivo\": \"https://example.com/docs/file.pdf\",\n    \"tipo\": \"Evidencia\",\n    \"fecha_subida\": \"2025-05-30\",\n    \"id_expediente\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/documentos",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "documentos"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Documento",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/documentos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "documentos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Documento",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Documento actualizado\",\n    \"descripcion\": \"Nueva descripción del documento\",\n    \"tipo\": \"Testimonio\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/documentos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "documentos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Documento",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/documentos/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "documentos", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Notificaciones",
+      "description": "Gestión de notificaciones",
+      "item": [
+        {
+          "name": "Listar Notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/notificaciones",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notificaciones"]
+            }
+          }
+        },
+        {
+          "name": "Crear Notificación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"titulo\": \"Nueva Notificación\",\n    \"mensaje\": \"Contenido de la notificación\",\n    \"tipo\": \"Aviso\",\n    \"estado\": \"No leída\",\n    \"id_usuario\": 1\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notificaciones",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notificaciones"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Notificación",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/notificaciones/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notificaciones", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Notificación",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"estado\": \"Leída\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/notificaciones/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notificaciones", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Notificación",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/notificaciones/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notificaciones", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Usuarios",
+      "description": "Gestión de usuarios (admin)",
+      "item": [
+        {
+          "name": "Listar Usuarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/users",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/users/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Nombre Actualizado\",\n    \"direccion\": \"Nueva Dirección\",\n    \"telefono\": \"1234567890\",\n    \"estado\": \"activo\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/users/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/users/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users", "1"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Roles de Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/api/users/1/roles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users", "1", "roles"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Roles de Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"roles\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/api/users/1/roles",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "users", "1", "roles"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": "tu_token_jwt_aqui"
+    }
+  ]
+}

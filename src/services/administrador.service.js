@@ -1,18 +1,21 @@
 // src/services/administrador.service.js
-const Rol     = require('../models/rol.model');
-const { Op }  = require('sequelize');
+const Rol = require("../models/rol.model");
+const { Usuario } = require("../models");
+const { Op } = require("sequelize");
 
 /**
  * Lista todos los usuarios con rol 'administrador'
  */
 async function listAdministradores() {
   return Usuario.findAll({
-    attributes: ['id_usuario','nombre','apellido','correo','telefono'],
-    include: [{
-      model: Rol,
-      where: { id_rol: 'administrador' },
-      attributes: []
-    }]
+    attributes: ["id_usuario", "nombre", "apellido", "correo", "telefono"],
+    include: [
+      {
+        model: Rol,
+        where: { id_rol: "administrador" },
+        attributes: [],
+      },
+    ],
   });
 }
 
@@ -22,11 +25,11 @@ async function listAdministradores() {
  */
 async function createAdministrador(data) {
   const usuario = await Usuario.create(data);
-  await usuario.addRol('administrador');
+  await usuario.addRol("administrador");
   return usuario;
 }
 
 module.exports = {
   listAdministradores,
-  createAdministrador
+  createAdministrador,
 };

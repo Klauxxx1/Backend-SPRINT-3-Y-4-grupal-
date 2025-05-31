@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    container_name: juzgado-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=gestion_juzgado
+      - DB_USER=postgres
+      - DB_PASS=1234567890
+      - JWT_SECRET=una_clave_secreta_muy_larga_y_segura
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:13
+    container_name: juzgado-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234567890
+      - POSTGRES_DB=gestion_juzgado
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./bd.sql:/docker-entrypoint-initdb.d/bd.sql
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
