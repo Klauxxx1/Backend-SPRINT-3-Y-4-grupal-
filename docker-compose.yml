@@ -24,7 +24,7 @@ services:
     image: postgres:13
     container_name: juzgado-postgres
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234567890
