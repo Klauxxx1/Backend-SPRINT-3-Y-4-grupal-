@@ -1,5 +1,6 @@
 // src/controllers/administrador.controller.js
 const service = require("../services/administrador.service");
+const bcrypt = require("bcryptjs");
 
 async function getAdministradores(req, res) {
   try {
@@ -13,11 +14,13 @@ async function getAdministradores(req, res) {
 
 async function crearAdministrador(req, res) {
   try {
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
     const data = {
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       correo: req.body.correo,
-      password_hash: req.body.password, // hazhearlo antes o aquí
+      password_hash: hash, // hazhearlo antes o aquí
       telefono: req.body.telefono,
       calle: req.body.calle,
       ciudad: req.body.ciudad,

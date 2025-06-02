@@ -10,7 +10,7 @@ services:
       - postgres
     environment:
       - DB_HOST=postgres
-      - DB_PORT=5432
+      - DB_PORT=5433
       - DB_NAME=gestion_juzgado
       - DB_USER=postgres
       - DB_PASS=1234567890
@@ -24,7 +24,7 @@ services:
     image: postgres:13
     container_name: juzgado-postgres
     ports:
-      - "5432:5432"
+      - "5433:5433"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234567890
