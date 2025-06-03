@@ -1,7 +1,11 @@
 // src/routes/user.routes.js
-const express = require('express');
-const router  = express.Router();
-const { getRoles, updateRoles } = require('../controllers/user.controller');
+const express = require("express");
+const router = express.Router();
+const {
+  getRoles,
+  updateRoles,
+  updateUsuario,
+} = require("../controllers/user.controller");
 
 // Opcional: añade tu middleware de autenticación y autorización aquí
 // const auth = require('../middlewares/auth.middleware');
@@ -9,7 +13,8 @@ const { getRoles, updateRoles } = require('../controllers/user.controller');
 
 // GET  /api/users/:id/roles   → ver roles de un usuario
 // PUT  /api/users/:id/roles   → actualizar roles (body: { roles: ['Juez','Abogado'] })
-router.get('/:id/roles'  /*, auth, authorize(['Administrador'])*/, getRoles);
-router.put('/:id/roles'  /*, auth, authorize(['Administrador'])*/, updateRoles);
+router.get("/:id/roles" /*, auth, authorize(['Administrador'])*/, getRoles);
+router.put("/:id/roles" /*, auth, authorize(['Administrador'])*/, updateRoles);
+router.put("/:id" /*, auth, authorize(['Administrador'])*/, updateUsuario);
 
 module.exports = router;

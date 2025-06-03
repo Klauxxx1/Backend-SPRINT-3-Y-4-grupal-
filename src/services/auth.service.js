@@ -7,7 +7,7 @@ const { Usuario, Rol, PasswordResetToken } = require("../models");
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRY = "8h";
 
-async function register({ nombre, apellido, correo, password }) {
+async function register({ nombre, apellido, correo, password, id_rol }) {
   // 1) Verificar que no exista el correo
   const existing = await Usuario.findOne({ where: { correo } });
   if (existing) throw new Error("El correo ya está en uso.");
@@ -20,15 +20,11 @@ async function register({ nombre, apellido, correo, password }) {
     apellido,
     correo,
     password_hash: hash,
+    id_rol,
   });
 
   // 3) Asignar rol por defecto "Funcionario"
   const defaultRole = await Rol.findByPk("Funcionario");
-  if (defaultRole) {
-    // Sequelize genera el método mágico addRol() por la relación belongsToMany
-    await user.addRol(defaultRole);
-  }
-
   return user;
 }
 

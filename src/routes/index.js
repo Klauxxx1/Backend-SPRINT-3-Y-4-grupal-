@@ -38,14 +38,14 @@ router.use("/clientes", authorizeRoles("admin", "abogado"), clientRoutes);
 // 7) Gestión de EXPEDIENTES (ADMIN, ABOGADO, JUEZ)
 router.use(
   "/expedientes",
-  authorizeRoles("admin", "abogado", "juez"),
+  authorizeRoles("admin", "abogado", "juez", "Cliente"),
   caseRoutes
 );
 
 // 8) CRUD de AUDIENCIAS (ADMIN, ABOGADO, JUEZ)
 router.use(
   "/audiencias",
-  authorizeRoles("admin", "abogado", "juez"),
+  authorizeRoles("admin", "abogado", "juez", "Cliente"),
   audienciaRoutes
 );
 

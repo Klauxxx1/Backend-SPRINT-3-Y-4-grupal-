@@ -1,8 +1,8 @@
 // src/models/audiencia.model.js
-const { DataTypes } = require('sequelize');
-const sequelize            = require('../db');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../db");
 const Audiencia = sequelize.define(
-  'Audiencia',
+  "Audiencia",
   {
     id_audiencia: {
       type: DataTypes.INTEGER,
@@ -13,8 +13,8 @@ const Audiencia = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'expediente',
-        key: 'id_expediente',
+        model: "expediente",
+        key: "id_expediente",
       },
     },
     fecha: {
@@ -22,7 +22,7 @@ const Audiencia = sequelize.define(
       allowNull: false,
     },
     duracion: {
-      type: DataTypes.STRING,    // almacena el intervalo como texto
+      type: DataTypes.STRING, // almacena el intervalo como texto
       allowNull: true,
     },
     ubicacion: {
@@ -30,27 +30,19 @@ const Audiencia = sequelize.define(
       allowNull: true,
     },
     estado: {
-      type: DataTypes.ENUM('Pendiente','Realizada','Cancelada'),
+      type: DataTypes.ENUM("Pendiente", "Realizada", "Cancelada"),
       allowNull: false,
-      defaultValue: 'Pendiente',
+      defaultValue: "Pendiente",
     },
-    id_juez: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'usuario',
-        key: 'id_usuario',
-      },
-    },
-        observacion: {
+    observacion: {
       type: DataTypes.TEXT,
-      allowNull: true
-    }
+      allowNull: true,
+    },
   },
   {
-    tableName: 'audiencia',
+    tableName: "audiencia",
     timestamps: false,
   }
 );
 
-module.exports = Audiencia;
+module.exports = { Audiencia };

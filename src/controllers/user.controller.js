@@ -1,5 +1,5 @@
 // src/controllers/user.controller.js
-const userService = require('../services/user.service');
+const userService = require("../services/user.service");
 
 async function getRoles(req, res) {
   try {
@@ -19,4 +19,30 @@ async function updateRoles(req, res) {
   }
 }
 
-module.exports = { getRoles, updateRoles };
+async function updateUsuario(req, res) {
+  try {
+    const { id } = req.params;
+    const userData = req.body;
+
+    // No permitir actualizar directamente el password por esta ruta
+    if (userData.password_hash) {
+      delete userData.password_hash;
+    }
+
+    const usuarioActualizado = await userService.updateUserData(id, userData);
+
+    res.json({
+      mensaje: "Usuario actualizado correctamente",
+      usuario: usuarioActualizado,
+    });
+  } catch (err) {
+    console.error(err);
+    // Determinar el código de estado basado en el error
+    let statusCode = 400;
+    if (err.message.includes("no encontrado")) statusCode = 404;
+
+    res.status(statusCode).json({ error: err.message });
+  }
+}
+
+module.exports = { getRoles, updateRoles, updateUsuario };

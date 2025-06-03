@@ -1,4 +1,4 @@
-//bd.sql
+--//bd.sql
 
 -- =========================================
 -- Base de datos para gestión de juzgado
@@ -7,12 +7,6 @@
 
 -- 1. Crear base de datos
 
-CREATE TABLE password_reset_token (
-  id SERIAL PRIMARY KEY,
-  token VARCHAR(255) UNIQUE NOT NULL,
-  expires_at TIMESTAMP NOT NULL,
-  id_usuario INT REFERENCES usuario(id_usuario) ON DELETE CASCADE
-);
 
 
 -- =========================================
@@ -21,7 +15,7 @@ CREATE TABLE password_reset_token (
 
 -- Tabla de Roles
 CREATE TABLE rol (
-    id_rol            VARCHAR(50) PRIMARY KEY  -- p.ej. 'Administrador', 'Juez', etc.
+    id_rol           VARCHAR(50) PRIMARY KEY  -- p.ej. 'Administrador', 'Juez', etc.
 );
 
 INSERT INTO rol (id_rol) VALUES 
@@ -47,17 +41,20 @@ CREATE TABLE usuario (
     calle             VARCHAR(150),
     ciudad            VARCHAR(100),
     codigo_postal     VARCHAR(20),
-    estado_usuario    VARCHAR(10) CHECK (estado_usuario IN ('Activo','Inactivo')) NOT NULL DEFAULT 'Activo',
-    fecha_registro    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP
+    estado_usuario    VARCHAR(10) NOT NULL DEFAULT 'Activo',
+    fecha_registro    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id_rol VARCHAR(50) REFERENCES rol(id_rol) ON DELETE SET NULL
 );
 
--- Tabla intermedia Usuario–Rol (para roles múltiples)
-CREATE TABLE usuario_rol (
-    id_usuario        INT    NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
-    id_rol            VARCHAR(50) NOT NULL REFERENCES rol(id_rol) ON DELETE RESTRICT,
-    PRIMARY KEY (id_usuario, id_rol)
-);
 
+
+
+CREATE TABLE password_reset_token (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(255) UNIQUE NOT NULL,
+  expires_at TIMESTAMP NOT NULL,
+  id_usuario INT REFERENCES usuario(id_usuario) ON DELETE CASCADE
+);
 
 -- =========================================
 -- 4. Entidades Externas (p.ej. testigos no registrados)
@@ -105,8 +102,14 @@ CREATE TABLE audiencia (
     duracion          INTERVAL,
     ubicacion         VARCHAR(255),
     estado            VARCHAR(20) CHECK (estado IN ('Pendiente','Realizada','Cancelada')) NOT NULL DEFAULT 'Pendiente',
-    id_juez           INT REFERENCES usuario(id_usuario) ON DELETE RESTRICT
     observacion       TEXT
+);
+
+create table audiencia_usuario(
+    id_audiencia      INT NOT NULL REFERENCES audiencia(id_audiencia) ON DELETE CASCADE,
+    id_usuario        INT NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    cargo VARCHAR(20) CHECK (cargo IN ('Demandante','Demandado','Abogado Demandado','Abogado Demandante','Juez')) NOT NULL,
+    PRIMARY KEY (id_audiencia, id_usuario)
 );
 
 -- =========================================

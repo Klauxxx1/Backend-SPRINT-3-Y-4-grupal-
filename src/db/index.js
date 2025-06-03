@@ -1,6 +1,5 @@
 // src/db/index.js
 const { Sequelize } = require("sequelize");
-
 const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS, DATABASE_URL } =
   process.env;
 
@@ -35,6 +34,10 @@ if (DATABASE_URL) {
     },
     define: {
       schema: "public",
+    },
+    timezone: "-04:00", // Ajusta a tu zona horaria
+    dialectOptions: {
+      useUTC: false, // Evitar conversión a UTC
     },
   });
 }

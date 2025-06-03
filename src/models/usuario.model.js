@@ -41,6 +41,14 @@ const Usuario = sequelize.define(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
+    id_rol: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      references: {
+        model: "rol", // Nombre de la tabla relacionada
+        key: "id_rol", // Clave primaria de la tabla relacionada
+      },
+    },
   },
   {
     tableName: "usuario",

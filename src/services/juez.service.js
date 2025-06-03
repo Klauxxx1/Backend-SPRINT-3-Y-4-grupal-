@@ -1,19 +1,23 @@
 // src/services/juez.service.js
-const Rol     = require('../models/rol.model');
-const Expediente = require('../models/expediente.model'); // si necesitas incluir expedientes
-const { Op } = require('sequelize');
+const Rol = require("../models/rol.model");
+const Usuario = require("../models/usuario.model");
+const Expediente = require("../models/expediente.model"); // si necesitas incluir expedientes
+const { Op } = require("sequelize");
 
 /**
  * Lista todos los usuarios que tienen el rol 'juez'
  */
 async function listJueces() {
   return Usuario.findAll({
-    attributes: ['id_usuario', 'nombre', 'apellido', 'correo', 'telefono'],
-    include: [{
-      model: Rol,
-      where: { id_rol: 'juez' },
-      attributes: []
-    }]
+    attributes: ["id_usuario", "nombre", "apellido", "correo", "telefono"],
+    include: [
+      {
+        model: Rol,
+        as: "rol",
+        where: { id_rol: "Juez" },
+        attributes: [],
+      },
+    ],
   });
 }
 
@@ -23,11 +27,13 @@ async function listJueces() {
 async function getJuezById(id) {
   return Usuario.findOne({
     where: { id_usuario: id },
-    include: [{
-      model: Rol,
-      where: { id_rol: 'juez' },
-      attributes: []
-    }]
+    include: [
+      {
+        model: Rol,
+        where: { id_rol: "juez" },
+        attributes: [],
+      },
+    ],
   });
 }
 
@@ -37,7 +43,7 @@ async function getJuezById(id) {
  */
 async function createJuez(data) {
   const usuario = await Usuario.create(data);
-  await usuario.addRol('juez');
+  await usuario.addRol("juez");
   return usuario;
 }
 
@@ -47,13 +53,13 @@ async function createJuez(data) {
 async function updateJuez(id, data) {
   const [updatedCount, [usuario]] = await Usuario.update(data, {
     where: { id_usuario: id },
-    returning: true
+    returning: true,
   });
   if (!updatedCount) return null;
   // Asegurar que conserva el rol
-  const roles = await usuario.getRols({ where: { id_rol: 'juez' } });
+  const roles = await usuario.getRols({ where: { id_rol: "juez" } });
   if (roles.length === 0) {
-    await usuario.addRol('juez');
+    await usuario.addRol("juez");
   }
   return usuario;
 }
@@ -74,15 +80,17 @@ async function deleteJuez(id) {
 async function getPerfilJuez(carnet) {
   return Usuario.findOne({
     where: { carnet_identidad: carnet },
-    include: [{
-      model: Rol,
-      where: { id_rol: 'juez' },
-      attributes: []
-    },
-    {
-      model: Expediente,
-      as: 'expedientes'   // si quieres incluir sus expedientes
-    }]
+    include: [
+      {
+        model: Rol,
+        where: { id_rol: "juez" },
+        attributes: [],
+      },
+      {
+        model: Expediente,
+        as: "expedientes", // si quieres incluir sus expedientes
+      },
+    ],
   });
 }
 
@@ -92,5 +100,5 @@ module.exports = {
   createJuez,
   updateJuez,
   deleteJuez,
-  getPerfilJuez
+  getPerfilJuez,
 };

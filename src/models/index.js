@@ -5,14 +5,14 @@ const { DataTypes } = require("sequelize");
 // Modelos base
 const Usuario = require("./usuario.model");
 const Rol = require("./rol.model");
-const UsuarioRol = require("./usuarioRol.model");
 const Expediente = require("./expediente.model");
 const ExpedienteAbogado = require("./expedienteAbogado.model");
-const Audiencia = require("./audiencia.model");
+const { Audiencia } = require("./audiencia.model");
 const ParteInvolucrada = require("./parteInvolucrada.model");
 const Documento = require("./documento.model");
 const DocumentoVersion = require("./documentoVersion.model");
 const PasswordResetToken = require("./passwordResetToken.model");
+const { AudienciaUsuario } = require("./audiencia_usuario.model");
 //const { Usuario, Rol } = require("../models");
 
 // Modelos definidos como funciones (requieren instanciación)
@@ -24,17 +24,9 @@ const Notificacion = require("./notificacion.model")(sequelize, DataTypes);
 // =======================
 
 // Usuario ↔ Rol (muchos a muchos)
-Usuario.belongsToMany(Rol, {
-  through: "usuario_rol", //UsuarioRol
-  foreignKey: "id_usuario",
-  otherKey: "id_rol",
-  as: "roles",
-});
-Rol.belongsToMany(Usuario, {
-  through: "usuario_rol", //UsuarioRol
+Usuario.belongsTo(Rol, {
+  as: "rol",
   foreignKey: "id_rol",
-  otherKey: "id_usuario",
-  as: "usuarios",
 });
 
 // Usuario ↔ Expediente (abogados)
@@ -64,11 +56,17 @@ Expediente.belongsTo(Usuario, {
 // Audiencia → Expediente
 Audiencia.belongsTo(Expediente, {
   as: "expediente",
-  foreignKey: "expediente_id",
+  foreignKey: "id_expediente",
 });
 
-// Audiencia → Usuario (juez)
-Audiencia.belongsTo(Usuario, { as: "juez", foreignKey: "id_juez" });
+AudienciaUsuario.belongsTo(Usuario, {
+  foreignKey: "id_usuario",
+  as: "usuario",
+});
+AudienciaUsuario.belongsTo(Audiencia, {
+  foreignKey: "id_audiencia",
+  as: "audiencia",
+});
 
 // Audiencia ↔ ParteInvolucrada (tabla intermedia)
 Audiencia.belongsToMany(ParteInvolucrada, {
@@ -135,7 +133,6 @@ module.exports = {
   sequelize,
   Usuario,
   Rol,
-  UsuarioRol,
   Expediente,
   ExpedienteAbogado,
   Audiencia,
