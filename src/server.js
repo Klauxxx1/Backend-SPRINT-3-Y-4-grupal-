@@ -1,3 +1,6 @@
+// Añadir como primera línea en server.js
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0"; // Solo para desarrollo
+
 const dotenv = require("dotenv");
 const path = require("path");
 
@@ -19,26 +22,26 @@ const PORT = Number(process.env.PORT) || 3000;
     await sequelize.authenticate();
     console.log("✅ Conexión a la BD establecida.");
 
-    // // Importar los modelos explícitamente para controlar el orden
-    // const models = require("./models");
+    // Importar los modelos explícitamente para controlar el orden
+    const models = require("./models");
 
-    // // 1. Sincronizar primero el modelo Rol
-    // await models.Rol.sync({ alter: true });
-    // console.log("✅ Tabla Rol sincronizada");
+    // 1. Sincronizar primero el modelo Rol
+    await models.Rol.sync({ alter: true });
+    console.log("✅ Tabla Rol sincronizada");
 
-    // // 2. Sincronizar modelos que dependen de Rol
-    // await models.Usuario.sync({ alter: true });
-    // console.log("✅ Tabla Usuario sincronizada");
+    // 2. Sincronizar modelos que dependen de Rol
+    await models.Usuario.sync({ alter: true });
+    console.log("✅ Tabla Usuario sincronizada");
 
     // 3. Sincronizar el resto de modelos
-    // const remainingModels = Object.values(models).filter(
-    //   (model) => model.name !== "Rol" && model.name !== "Usuario"
-    // );
+    const remainingModels = Object.values(models).filter(
+      (model) => model.name !== "Rol" && model.name !== "Usuario"
+    );
 
-    // for (const model of remainingModels) {
-    //   await model.sync({ alter: true });
-    //   console.log(`✅ Tabla ${model.name} sincronizada`);
-    // }
+    for (const model of remainingModels) {
+      await model.sync({ alter: true });
+      console.log(`✅ Tabla ${model.name} sincronizada`);
+    }
 
     console.log("✅ Todas las tablas sincronizadas correctamente");
 

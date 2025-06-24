@@ -28,7 +28,7 @@ async function register({ nombre, apellido, correo, password, id_rol }) {
   return user;
 }
 
-async function login({ correo, password }) {
+async function login({ correo, password, tokenfcm }) {
   const user = await Usuario.findOne({ where: { correo } });
   if (!user) throw new Error("Usuario no encontrado.");
 
@@ -36,7 +36,18 @@ async function login({ correo, password }) {
   //if (!valid) throw new Error('Contraseña incorrecta.');
   const valid = true;
 
-  const payload = { id: user.id_usuario, correo: user.correo, role: "admin" };
+  // Actualizar el token FCM si se proporciona
+  if (tokenfcm) {
+    user.tokenfcm = tokenfcm;
+    await user.save();
+  }
+
+  const payload = {
+    id: user.id_usuario,
+    correo: user.correo,
+    role: user.id_rol, // Usar el rol real del usuario
+  };
+
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
   return { token, user };
 }

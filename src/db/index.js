@@ -1,50 +1,45 @@
 // src/db/index.js
 const { Sequelize } = require("sequelize");
-const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS, DATABASE_URL } =
-  process.env;
+const fs = require("fs");
+const path = require("path");
+const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS } = process.env;
 
-let sequelize;
+// Ruta al certificado CA
+const caCertPath = path.join(__dirname, "ca-certificate.crt");
+const caCert = fs.readFileSync(caCertPath).toString();
 
-if (DATABASE_URL) {
-  // Railway
-  sequelize = new Sequelize(DATABASE_URL, {
-    dialect: "postgres",
-    protocol: "postgres",
-    logging: false,
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-      prependSearchPath: true,
+// String de conexión
+const connectionString = `postgres://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=require`;
+
+// Instancia de Sequelize con configuración completa
+const sequelize = new Sequelize(connectionString, {
+  dialect: "postgres",
+  logging: false,
+  timezone: "-04:00", // Ajuste para la zona horaria
+  dialectOptions: {
+    useUTC: false, // Evitar conversión a UTC
+    prependSearchPath: true,
+    ssl: {
+      require: true,
+      ca: caCert, // Usar el certificado CA
+      rejectUnauthorized: false, // Añadir esta línea - Acepta certificados no verificados
     },
-    define: {
-      schema: "public",
-    },
-  });
-} else {
-  // Local
-  sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
-    host: DB_HOST,
-    port: DB_PORT,
-    dialect: "postgres",
-    logging: false,
-    dialectOptions: {
-      prependSearchPath: true,
-    },
-    define: {
-      schema: "public",
-    },
-    timezone: "-04:00", // Ajusta a tu zona horaria
-    dialectOptions: {
-      useUTC: false, // Evitar conversión a UTC
-    },
-  });
-}
-// Agregar estos logs
+  },
+  define: {
+    schema: "public",
+  },
+});
+
+// Logs de diagnóstico
 console.log("Configuración de conexión a la base de datos:");
 console.log(`- Host: ${DB_HOST}`);
 console.log(`- Puerto: ${DB_PORT}`);
 console.log(`- Base de datos: ${DB_NAME}`);
 console.log(`- Usuario: ${DB_USER}`);
+console.log(
+  `- Certificado CA: ${caCertPath} (${
+    fs.existsSync(caCertPath) ? "Encontrado" : "No encontrado!"
+  })`
+);
+
 module.exports = sequelize;

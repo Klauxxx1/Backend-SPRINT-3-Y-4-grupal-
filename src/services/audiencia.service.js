@@ -2,6 +2,8 @@
 const { Audiencia } = require("../models/audiencia.model"); // models/index.js
 const { Usuario, AudienciaParte, Rol } = require("../models");
 const { AudienciaUsuario } = require("../models/audiencia_usuario.model");
+const { crearNotificacion } = require("../services/notificacion.service");
+
 // const Rol = require("../models/rol.model");
 
 /**
@@ -10,16 +12,34 @@ const { AudienciaUsuario } = require("../models/audiencia_usuario.model");
  * @returns {Promise<Audiencia>}
  */
 async function createAudiencia(data) {
-  // Sequelize mapeará los campos automáticamente
+  // Extraer la lista de usuarios si existe
+  const { usuarios, ...audienciaData } = data;
+
+  // Crear la audiencia
   const nueva = await Audiencia.create({
-    id_expediente: data.id_expediente,
-    fecha: data.fecha,
-    sala: data.sala,
-    ubicacion: data.ubicacion || "Sala 1",
-    duracion: data.duracion || "1 hour",
-    estado: data.estado || "Pendiente",
-    observacion: data.observacion || "UwU",
+    id_expediente: audienciaData.id_expediente,
+    fecha: audienciaData.fecha,
+    sala: audienciaData.sala,
+    ubicacion: audienciaData.ubicacion || "Sala 1",
+    duracion: audienciaData.duracion || "1 hour",
+    estado: audienciaData.estado || "Pendiente",
+    observacion: audienciaData.observacion || "UwU",
   });
+
+  // Si hay usuarios para asignar, procesarlos
+  if (usuarios && Array.isArray(usuarios) && usuarios.length > 0) {
+    for (const usuario of usuarios) {
+      // Verificar que cada objeto de usuario tenga la estructura correcta
+      if (usuario.id_usuario && usuario.cargo) {
+        await addUsuarioAudiencia(
+          nueva.id_audiencia,
+          usuario.id_usuario,
+          usuario.cargo
+        );
+      }
+    }
+  }
+
   return nueva;
 }
 
@@ -86,12 +106,29 @@ async function addUsuarioAudiencia(id_audiencia, id_usuario, cargo) {
   const usuario = await Usuario.findByPk(id_usuario);
   if (!audiencia || !usuario) throw new Error("Usuario o Audiencia no existe");
 
+  // Crear la relación en la tabla intermedia
   await AudienciaUsuario.create({
     id_audiencia: id_audiencia,
     id_usuario: id_usuario,
     cargo: cargo,
   });
-  return;
+
+  // Formatear la fecha para la notificación
+  const fechaFormateada = new Date(audiencia.fecha).toLocaleString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  // Crear el mensaje de notificación
+  const mensaje = `Has sido asignado a una audiencia como ${cargo}. Fecha: ${fechaFormateada}. Ubicación: ${audiencia.ubicacion}.`;
+
+  // Enviar notificación (esto también enviará notificación push si el usuario tiene token FCM)
+  await crearNotificacion(id_usuario, mensaje);
+
+  return true;
 }
 
 async function getAudienciasByUsuario(id_usuario) {

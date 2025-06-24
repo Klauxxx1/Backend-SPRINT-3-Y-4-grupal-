@@ -43,6 +43,7 @@ CREATE TABLE usuario (
     codigo_postal     VARCHAR(20),
     estado_usuario    VARCHAR(10) NOT NULL DEFAULT 'Activo',
     fecha_registro    TIMESTAMP   NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    tokenfcm      VARCHAR(255),  -- para notificaciones push
     id_rol VARCHAR(50) REFERENCES rol(id_rol) ON DELETE SET NULL
 );
 

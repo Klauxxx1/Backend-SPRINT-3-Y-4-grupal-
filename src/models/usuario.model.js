@@ -14,6 +14,11 @@ const Usuario = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    tokenfcm: {
+      type: DataTypes.STRING(255),
+      allowNull: true, // Permitir nulo para usuarios sin token
+      defaultValue: null, // Valor por defecto si no se proporciona
+    },
     apellido: {
       type: DataTypes.STRING(100),
       allowNull: false,

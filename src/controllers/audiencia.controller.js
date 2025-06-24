@@ -15,10 +15,16 @@ const audService = require("../services/audiencia.service");
 async function crearAudiencia(req, res) {
   try {
     const nueva = await createAudiencia(req.body);
-    res.status(201).json(nueva);
+    res.status(201).json({
+      mensaje: "Audiencia creada correctamente",
+      audiencia: nueva,
+      usuarios_asignados: req.body.usuarios ? req.body.usuarios.length : 0,
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ mensaje: "Error al crear audiencia" });
+    res
+      .status(500)
+      .json({ mensaje: "Error al crear audiencia", error: err.message });
   }
 }
 
@@ -127,14 +133,46 @@ async function deleteParte(req, res) {
     res.status(400).json({ error: err.message });
   }
 }
-
+//--------------------------------------------------asdasdasdasdsdsaasd
 async function postUsuario(req, res) {
   try {
     const { id_audiencia, id_usuario, cargo } = req.body;
+
+    // Primero vinculamos el usuario a la audiencia
     await audService.addUsuarioAudiencia(id_audiencia, id_usuario, cargo);
-    res
-      .status(200)
-      .json({ mensaje: "Usuario vinculado a audiencia correctamente" });
+
+    // Obtenemos información detallada de la audiencia para la notificación
+    const audiencia = await audService.getAudienciaById(id_audiencia);
+
+    if (audiencia) {
+      // Formateamos la fecha para mostrarla en la notificación
+      const fechaFormateada = new Date(audiencia.fecha).toLocaleString(
+        "es-ES",
+        {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      );
+
+      // Creamos el mensaje de notificación
+      const mensaje = `Has sido asignado a una audiencia como ${cargo}. Fecha: ${fechaFormateada}. Ubicación: ${audiencia.ubicacion}.`;
+
+      // Enviamos la notificación al usuario
+      await crearNotificacion(id_usuario, mensaje);
+
+      res.status(200).json({
+        mensaje: "Usuario vinculado a audiencia correctamente",
+        notificacion: "Notificación enviada al usuario",
+      });
+    } else {
+      res.status(200).json({
+        mensaje: "Usuario vinculado a audiencia correctamente",
+        notificacion: "No se pudo enviar notificación: audiencia no encontrada",
+      });
+    }
   } catch (err) {
     console.error(err);
     res.status(400).json({ error: err.message });
