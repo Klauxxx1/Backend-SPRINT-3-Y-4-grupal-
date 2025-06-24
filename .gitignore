@@ -20,3 +20,5 @@ logs/
 Thumbs.db
 
 
+src/config/firebase-key.json
+firebase-key.json
